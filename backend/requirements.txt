@@ -1,0 +1,10 @@
+flask
+flask-cors
+flask-jwt-extended
+flask-mail
+pymongo
+python-dotenv
+flask-bcrypt
+dnspython
+apscheduler
+gunicorn
