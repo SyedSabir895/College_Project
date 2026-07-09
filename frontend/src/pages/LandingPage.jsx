@@ -68,26 +68,41 @@ const LandingPage = () => {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
 
-      <div className={`w-full max-w-4xl text-center mb-12 relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className="w-full max-w-6xl relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+
+      <div className={`flex-1 text-left transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-xl">
           <Sparkles className="w-4 h-4 text-indigo-400" />
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">Next-Gen Academic Management</span>
         </div>
-        
-        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight">
+
+        <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight">
           Manage Your <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-blue-400 to-indigo-400 animate-gradient-x">
             College Operations
           </span>
         </h1>
-        
-        <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto font-medium leading-relaxed">
-          The ultimate multi-tenant task management system designed specifically for educational institutions. 
+
+        <p className="text-lg text-white/60 max-w-lg font-medium leading-relaxed mb-8">
+          The ultimate multi-tenant task management system designed specifically for educational institutions.
           Empower HODs, simplify teacher workflows, and elevate productivity.
         </p>
+
+        <div className="flex flex-col gap-3">
+          {[
+            { icon: <ShieldCheck size={16} className="text-green-400" />, bg: 'bg-green-500/20', text: 'Enterprise-grade security' },
+            { icon: <Sparkles size={16} className="text-indigo-400" />, bg: 'bg-indigo-500/20', text: 'Cloud synchronized in real-time' },
+            { icon: <CheckCircle2 size={16} className="text-blue-400" />, bg: 'bg-blue-500/20', text: 'Multi-tenant institution support' },
+          ].map(({ icon, bg, text }) => (
+            <div key={text} className="flex items-center gap-3 text-white/60">
+              <div className={`rounded-full ${bg} p-1.5`}>{icon}</div>
+              <span className="text-sm font-medium">{text}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className={`w-full max-w-md relative z-10 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+      <div className={`w-full max-w-md shrink-0 relative z-10 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
         <div className="rounded-[40px] border border-white/20 bg-white/5 p-1 pt-1 shadow-[0_32px_64px_rgba(0,0,0,0.5)] backdrop-blur-3xl overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-50" />
           
@@ -156,8 +171,10 @@ const LandingPage = () => {
         </div>
       </div>
 
+      </div>
+
       <div className={`mt-12 relative z-10 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100' : 'opacity-0'} flex flex-col items-center gap-4`}>
-        <button 
+        <button
           onClick={() => {
             localStorage.setItem('selectedCollege', 'System');
             navigate('/login');

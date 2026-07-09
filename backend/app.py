@@ -29,8 +29,9 @@ CORS(app, resources={
     r"/api/.*": {
         "origins": [
             "https://ethara-ai-clgproject.up.railway.app",
+            "https://college-project-w02x.onrender.com",
             "http://localhost:5173",
-            # "http://localhost:5174",
+            "http://localhost:5174",
             "http://localhost:3000"
         ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
