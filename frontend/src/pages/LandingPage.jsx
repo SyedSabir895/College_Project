@@ -2,26 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { School, ArrowRight, CheckCircle2, Sparkles, Building2, ShieldCheck } from 'lucide-react';
 import nriBg from '../assets/nri.png';
+import api from '../services/api';
 
 const LandingPage = () => {
   const [collegeName, setCollegeName] = useState('');
+  const [institutionError, setInstitutionError] = useState('');
+  const [isCheckingInstitution, setIsCheckingInstitution] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
-    // Check if college is already selected
     const savedCollege = localStorage.getItem('selectedCollege');
-    if (savedCollege) {
+    if (savedCollege && savedCollege !== 'System') {
       setCollegeName(savedCollege);
     }
   }, []);
 
-  const handleContinue = (e) => {
+  const handleContinue = async (e) => {
     e.preventDefault();
-    if (collegeName.trim()) {
-      localStorage.setItem('selectedCollege', collegeName.trim());
+
+    const trimmedName = collegeName.trim();
+    if (!trimmedName) {
+      setInstitutionError('Institution name is required.');
+      return;
+    }
+
+    setInstitutionError('');
+    setIsCheckingInstitution(true);
+
+    try {
+      const { data } = await api.get('/auth/institutions/check', {
+        params: { name: trimmedName }
+      });
+
+      if (!data?.available) {
+        setInstitutionError('Institution is not available.');
+        return;
+      }
+
+      localStorage.setItem('selectedCollege', data.institution || trimmedName);
       navigate('/login');
+    } catch (error) {
+      setInstitutionError('Unable to validate institution right now. Please try again.');
+    } finally {
+      setIsCheckingInstitution(false);
     }
   };
 
@@ -89,17 +114,24 @@ const LandingPage = () => {
                     placeholder="e.g. NRI Institute of Technology"
                     className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4.5 text-white placeholder:text-white/20 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:bg-white/10 focus:ring-4 focus:ring-indigo-500/10 shadow-inner"
                     required
+                    disabled={isCheckingInstitution}
                   />
                 </div>
+                {institutionError && (
+                  <p className="text-xs text-red-300">{institutionError}</p>
+                )}
               </div>
 
               <button
                 type="submit"
+                disabled={isCheckingInstitution}
                 className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-indigo-600 px-6 py-4.5 font-bold text-white transition-all duration-500 hover:bg-indigo-500 hover:shadow-[0_0_40px_rgba(79,70,229,0.5)] active:scale-[0.98]"
               >
                 <span className="relative z-10 flex items-center gap-3 text-lg">
-                  Access Portal
-                  <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" />
+                  {isCheckingInstitution ? 'Checking...' : 'Access Portal'}
+                  {!isCheckingInstitution && (
+                    <ArrowRight className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" />
+                  )}
                 </span>
                 {/* Shine effect */}
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />

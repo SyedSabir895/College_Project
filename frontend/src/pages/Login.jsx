@@ -12,23 +12,59 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [collegeName, setCollegeName] = useState('');
+  const [isCollegeValidating, setIsCollegeValidating] = useState(true);
   
   const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedCollege = localStorage.getItem('selectedCollege');
-    if (!savedCollege) {
-      navigate('/');
-    } else {
-      setCollegeName(savedCollege);
-    }
+    const validateSelectedCollege = async () => {
+      const savedCollege = localStorage.getItem('selectedCollege');
+      if (!savedCollege) {
+        navigate('/');
+        return;
+      }
+
+      if (savedCollege === 'System') {
+        setCollegeName(savedCollege);
+        setIsCollegeValidating(false);
+        return;
+      }
+
+      try {
+        const { data } = await api.get('/auth/institutions');
+        const institutions = Array.isArray(data?.institutions) ? data.institutions : [];
+        const matched = institutions.find(
+          (name) => name.toLowerCase() === savedCollege.toLowerCase()
+        );
+
+        if (!matched) {
+          localStorage.removeItem('selectedCollege');
+          navigate('/');
+          return;
+        }
+
+        setCollegeName(matched);
+      } catch (e) {
+        setError('Unable to validate institution. Please try again.');
+      } finally {
+        setIsCollegeValidating(false);
+      }
+    };
+
+    validateSelectedCollege();
   }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+
+    if (isCollegeValidating || !collegeName) {
+      setError('Institution validation is in progress. Please wait.');
+      setLoading(false);
+      return;
+    }
 
     try {
       const { data } = await api.post('/auth/login', { 

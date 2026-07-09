@@ -6,7 +6,6 @@ from datetime import datetime
 import secrets
 import string
 from flask_mail import Message
-import threading
 
 user_bp = Blueprint('users', __name__)
 bcrypt = Bcrypt()
@@ -57,8 +56,9 @@ def manage_teachers():
 
         result = db.users.insert_one(new_teacher)
 
-        # Send credentials via SMTP in a background thread
-        email_sent = True # Assume true as it will be handled in background
+        # Send credentials via SMTP and capture the real delivery result
+        email_sent = False
+        email_error = None
         try:
             from app import mail
             msg = Message(
@@ -73,30 +73,18 @@ def manage_teachers():
                     "Regards,\nCollege Task Manager Team"
                 )
             )
-            
-            # Capture real app instance BEFORE thread starts
-            app = current_app._get_current_object()
-
-            def _send(msg, app):
-                with app.app_context():
-                    try:
-                        mail.send(msg)
-                        print(f"✓ Teacher credentials email sent successfully to {email}")
-                    except Exception as e:
-                        print(f"❌ Failed to send email to {email}: {e}")
-
-            thread = threading.Thread(target=_send, args=(msg, app))
-            thread.start()
-            
+            mail.send(msg)
+            email_sent = True
+            print(f"✓ Teacher credentials email sent successfully to {email}")
         except Exception as e:
-            email_sent = False
+            email_error = str(e)
             print(f"❌ Error initiating email thread: {e}")
 
         return jsonify({
             "message": "Teacher added successfully",
             "id": str(result.inserted_id),
             "emailSent": email_sent,
-            "emailError": email_error if not email_sent else None
+            "emailError": email_error
         }), 201
 
     # GET method - Filter by college

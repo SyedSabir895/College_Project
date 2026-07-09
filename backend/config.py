@@ -26,8 +26,8 @@ class Config:
     )
     # Email logging timeout to prevent app from hanging
     MAIL_SUPPRESS_SEND = os.getenv('MAIL_SUPPRESS_SEND', 'false').lower() == 'true'  # Set to true to disable sending (for testing)
-    FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173').replace('localhost:5174', 'localhost:5173')
-    
+    FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+ 
     @classmethod
     def validate_mail_config(cls):
         """Validate that required mail configuration is present"""

@@ -6,6 +6,7 @@ from bson import ObjectId
 from datetime import datetime, timedelta
 import secrets
 import threading
+import re
 from config import Config
 
 auth_bp = Blueprint('auth', __name__)
@@ -111,6 +112,43 @@ def login():
         return jsonify(user_data), 200
     
     return jsonify({"message": "Invalid email or password"}), 401
+
+
+@auth_bp.route('/institutions', methods=['GET'])
+def get_institutions():
+    try:
+        institutions = list(
+            db.institutions.find({}, {"name": 1, "_id": 0}).sort("name", 1)
+        )
+        names = [inst.get('name', '').strip() for inst in institutions if inst.get('name')]
+        return jsonify({"institutions": names}), 200
+    except Exception as e:
+        return jsonify({"message": "Failed to fetch institutions", "error": str(e)}), 500
+
+
+@auth_bp.route('/institutions/check', methods=['GET'])
+def check_institution_availability():
+    try:
+        name = (request.args.get('name') or '').strip()
+        if not name:
+            return jsonify({"available": False, "message": "Institution name is required"}), 400
+
+        institution = db.institutions.find_one(
+            {
+                "name": {
+                    "$regex": f"^{re.escape(name)}$",
+                    "$options": "i"
+                }
+            },
+            {"name": 1, "_id": 0}
+        )
+
+        if not institution:
+            return jsonify({"available": False, "message": "Institution is not available"}), 200
+
+        return jsonify({"available": True, "institution": institution.get('name')}), 200
+    except Exception as e:
+        return jsonify({"available": False, "message": "Failed to validate institution", "error": str(e)}), 500
 
 
 @auth_bp.route('/forgot-password', methods=['POST'])

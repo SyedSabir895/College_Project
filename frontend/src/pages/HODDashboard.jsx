@@ -117,14 +117,13 @@ const HODDashboard = () => {
     try {
       const res = await api.post("/users", teacherFormData);
       setShowTeacherModal(false);
-      setTeacherFormData({ name: "", email: "" });
+      setTeacherFormData({ name: "", email: "", password: "" });
       
-      // Show feedback about email status
       if (res.data.emailSent) {
-        alert(`✓ Teacher added successfully!\n\nCredentials email sent to ${teacherFormData.email}`);
+        alert(`✓ Teacher added successfully!\n\nThe teacher has been notified by email at ${teacherFormData.email}`);
       } else {
         alert(
-          `⚠️ Teacher added successfully!\n\nBut credential email failed to send.\nError: ${res.data.emailError}\n\nYou may need to send credentials manually or check SMTP configuration.`
+          `⚠️ Teacher added successfully!\n\nThe teacher was created, but the notification email was not sent.\nError: ${res.data.emailError || 'Unknown SMTP error'}\n\nYou may need to send credentials manually or check SMTP configuration.`
         );
       }
       
