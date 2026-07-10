@@ -112,7 +112,7 @@ const Signup = () => {
             className="flex items-center gap-1.5 text-white/40 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest group"
           >
             <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-1" />
-            Switch Institution
+            Back
           </button>
         </div>
 

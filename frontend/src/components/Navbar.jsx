@@ -21,7 +21,7 @@ const Navbar = ({ title }) => {
             <div className="w-10 h-10 flex items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 p-1.5 shadow-sm">
               <img src={EtharaLogo} alt="Ethara Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="text-xl font-bold text-slate-800 hidden sm:block">Ethara</span>
+            <span className="text-xl font-bold text-slate-800 hidden sm:block">{user?.college || 'Ethara'}</span>
             <div className="h-6 w-px bg-slate-200 mx-2 hidden sm:block"></div>
             <h2 className="text-lg font-medium text-slate-600 truncate max-w-50 sm:max-w-md">{title}</h2>
           </div>

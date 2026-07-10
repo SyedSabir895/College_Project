@@ -183,9 +183,9 @@ const LandingPage = () => {
         >
           System Administration Access
         </button>
-        <p className="text-white/10 text-[10px] font-bold uppercase tracking-[0.3em]">
+        {/* <p className="text-white/10 text-[10px] font-bold uppercase tracking-[0.3em]">
           Powered by Ethara AI Technologies
-        </p>
+        </p> */}
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `

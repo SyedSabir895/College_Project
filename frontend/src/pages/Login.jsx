@@ -101,21 +101,21 @@ const Login = () => {
       <div className="absolute top-[-10%] right-[-10%] w-[30%] h-[30%] bg-indigo-600/10 rounded-full blur-[100px]" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-blue-600/10 rounded-full blur-[100px]" />
 
-      <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="w-full max-w-sm relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="mb-6 flex justify-start px-2">
            <button 
             onClick={() => navigate('/')}
             className="flex items-center gap-1.5 text-white/40 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest group"
           >
             <ChevronLeft size={14} className="transition-transform group-hover:-translate-x-1" />
-            Switch Institution
+            Back
           </button>
         </div>
 
-        <div className="rounded-[40px] border border-white/20 bg-[#0a1221]/60 p-10 text-white shadow-[0_32px_64px_rgba(0,0,0,0.5)] backdrop-blur-3xl border-t-white/30 overflow-hidden relative">
+        <div className="rounded-4xl border border-white/20 bg-[#0a1221]/60 p-7 text-white shadow-[0_32px_64px_rgba(0,0,0,0.5)] backdrop-blur-3xl border-t-white/30 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-indigo-500 opacity-50" />
           
-          <div className="mb-10 flex flex-col items-center text-center">
+          <div className="mb-6 flex flex-col items-center text-center">
             <div className="mb-5 relative">
               <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20" />
               <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur-md">
@@ -190,7 +190,7 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-10 text-center space-y-4 pt-8 border-t border-white/5">
+          <div className="mt-6 text-center space-y-3 pt-5 border-t border-white/5">
             <Link to="/reset-password" size="sm" className="block text-xs font-bold uppercase tracking-widest text-white/30 hover:text-white transition-colors">
               Forgot Password?
             </Link>
@@ -203,9 +203,9 @@ const Login = () => {
       </div>
       
       <footer className="mt-10 relative z-10">
-        <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/10">
+        {/* <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/10">
           Encrypted Session
-        </p>
+        </p> */}
       </footer>
     </div>
   );
